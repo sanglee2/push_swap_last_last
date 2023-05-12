@@ -1,5 +1,6 @@
 
 #include"push_swap.h"
+#include<limits.h>
 
 // void sort_two_element(t_deq *deq_a)
 // {
@@ -85,19 +86,107 @@ void sort_three_element(t_deq *deq_a)
         rra(deq_a);
 }
 
+void sort_four_element(t_deq* deq_a, t_deq* deq_b)
+{
+    t_deq *temp;
+    int max;
+    int min;
+    int size;
+
+    temp = deq_a;
+    max = get_max_value(deq_a);
+    min = get_min_value(deq_a);
+    size = deq_a->a_size;
+
+    while (temp->a_top->content && size > 3)
+    {
+        if (temp->a_top->index == max || temp->a_top->index == min)
+            pa(deq_a, deq_b);
+        else
+            ra(deq_a);
+        size--;
+    }
+    sort_three_element(deq_a);
+    pa (deq_a, deq_b);
+}
+
+void sort_five_element(t_deq* deq_a, t_deq* deq_b)
+{
+    t_deq *temp;
+    int max;
+    int min;
+
+    temp = deq_a;
+    max = get_max_value(deq_a);
+    min = get_min_value(deq_a);
+
+    while (temp->a_top->content)
+    {
+        if (temp->a_top->index == max || temp->a_top->index == min)
+            pa(deq_a, deq_b);
+        else
+            ra(deq_a);
+    }
+    sort_three_element(deq_a);
+    sort_two_elemen(deq_a);
+    //deq이 빌 때까지 while문을 돌리는 것이 맞는지
+    pa (deq_a, deq_b);
+    pa (deq_a, deq_b);
+}
+
+
 void    sort(t_deq *deq_a, t_deq *deq_b)
 {
-    if (deq_a->size == 1)
+    if (deq_a->a_size == 1)
         return ;
-    else if (deq_a->size == 2 && !check_sort(deq_a))
+    else if (deq_a->a_size == 2 && !check_sort(deq_a))
         sort_two_element(deq_a);
-    else if (deq_a->size == 3 && !check_sort(deq_a))
+    else if (deq_a->a_size == 3 && !check_sort(deq_a))
         sort_three_element(deq_a);
+    else if (deq_a->a_size == 4 && !check_sort(deq_a))
+        sort_four_element(deq_a);
+    else if (deq_a->a_size == 5 && !check_sort(deq_a))
+        sort_five_element(deq_a);
     else if (!check_sort(deq_a))
         greedy(deq_a, deq_b);
 }
 
+int get_max_value(t_deq* deq_a)
+{
+    int max;
+    t_deq *temp;
 
+    temp = deq_a;
+    max = INT_MIN;
+
+    while(temp->a_top)
+    {
+        if (max < temp->a_top->index)
+            max = temp->a_top->index;
+        temp->a_top = temp->a_top->next;
+    }
+    return (max);
+}
+
+int get_min_value(t_deq* deq_a)
+{
+    int min;
+    t_deq *temp;
+
+    temp = deq_a;
+    min = INT_MAX;
+
+    while(temp->a_top)
+    {
+        if (min > temp->a_top->index)
+            min = temp->a_top->index;
+        temp->a_top = temp->a_top->next;
+    }
+    return (min);
+}
+
+
+// ------
 // sorting에서 명령어를 실행하는 부분, 꼭, 꼭 만들어야 한다.
 // pa 나 pb 그런식으로요.
 
@@ -128,12 +217,5 @@ void get_min_rotation(int *a, int *b)
         deq_b = deq_b->next;
         idx++;
     }
-
-
-
-
-
-
 }
-
 

@@ -6,7 +6,7 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 20:19:28 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/09 14:11:44 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/13 03:49:52 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ while (temp)
 	temp = temp->next;
 	cur_loc++;
 }
-if(flag == 1)
+if (flag == 1)
 	return(deq_a_loc);
 
 temp = deq_a;
@@ -68,17 +68,17 @@ int get_a_loc(t_deq* deq_a, int b_content) //deq_b_b_top_content)
 
 	deq_a_loc = 0;
 	cur_loc = 0;
-	min = 0;
+	min = INT_MAX;
 	min_a = INT_MAX;
 	temp = deq_a;
 
 	while (temp->a_top)
 	{
-		if (b_content > temp->a_top->content)
+		if (b_content < temp->a_top->content)
 		{
-			if (min > b_content - temp->a_top->content)
+			if (min > temp->a_top->content - b_content)
 			{
-				min = b_content - temp->a_top->content;
+				min = temp->a_top->content - b_content;
 				deq_a_loc = cur_loc;
 			}
 		}
@@ -86,7 +86,7 @@ int get_a_loc(t_deq* deq_a, int b_content) //deq_b_b_top_content)
 		cur_loc++;
 	}
 	// 같을 경우가 있겠지만 괜찮을 거 같아.
-	if (min == 0)
+	if (min == INT_MAX)
 	{
 		temp = deq_a;
 		cur_loc = 0;
@@ -101,6 +101,8 @@ int get_a_loc(t_deq* deq_a, int b_content) //deq_b_b_top_content)
 			cur_loc++;
 		}
 	}
+	if (deq_a_loc > temp->a_size / 2)
+		deq_a_loc = (temp->a_size - deq_a_loc) * -1;
 	return (deq_a_loc);
 }
 

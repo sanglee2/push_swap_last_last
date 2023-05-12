@@ -6,7 +6,7 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 18:42:13 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/06 06:00:26 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/13 03:59:00 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,12 @@
 #include <limits.h>
 
 void act_sort(t_deq *deq_a, t_deq *deq_b, int a_rot, int b_rot)
-{
-	int a_size;
-	int b_size;
-
-	a_size = get_deq_size(deq_a);
-	b_size = get_deq_size(deq_b);
-	
-	if (a_rot > a_size / 2)
-	{
-		a_rot = a_size - a_rot;
+{	
+	if (a_rot < 0)
 		iterate_rra(deq_a, a_rot);
-	}
 	iterate_ra(deq_a, a_rot);
-	if (b_rot > b_size / 2)
-	{
-		b_rot = b_size - b_rot;
+	if (b_rot < 0)
 		iterate_rra(deq_b, b_rot);
-	}
 	iterate_rb(deq_b, b_rot);
 	pa(deq_a, deq_b);
 }
@@ -58,9 +46,9 @@ void get_rot_count(t_deq* deq_a, t_deq* deq_b)
 	{	
 		b_loc = get_b_loc(deq_b, temp->b_top->content);
 		a_loc = get_a_loc(deq_a, temp->b_top->content);
-		if (min > a_loc + b_loc)
+		if (min > ft_abs(a_loc) + ft_abs(b_loc))
 		{
-			min = a_loc + b_loc;
+			min = ft_abs(a_loc) + ft_abs(b_loc);
 			a_rot = a_loc;
 			b_rot = b_loc;
 		}
@@ -124,4 +112,24 @@ void get_rot_count(t_deq* deq_a, t_deq* deq_b)
 
 // 	count_b = get_b_loc(deq_b);
 // 	return (count_a + count_b);
+// }
+
+
+// act_sort의 기록! 기록들!
+
+// void act_sort(t_deq *deq_a, t_deq *deq_b, int a_rot, int b_rot)
+// {	
+// 	if (a_rot > deq_a->a_size / 2)
+// 	{
+// 		a_rot = deq_a->a_size - a_rot;
+// 		iterate_rra(deq_a, a_rot);
+// 	}
+// 	iterate_ra(deq_a, a_rot);
+// 	if (b_rot > b_size / 2)
+// 	{
+// 		b_rot = b_size - b_rot;
+// 		iterate_rra(deq_b, b_rot);
+// 	}
+// 	iterate_rb(deq_b, b_rot);
+// 	pa(deq_a, deq_b);
 // }

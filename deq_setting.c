@@ -6,11 +6,55 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:50:51 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/10 17:11:42 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/13 04:01:04 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
+void pre_setting_deque(t_deq *deq_a, t_deq *deq_b)
+{
+
+	while (deq_a->a_size > 6 && deq_a->a_top)
+	{
+		if (deq_a->a_top->index <= deq_a->a_size / 2)
+			pb(deq_a, deq_b);
+		ra(deq_a, deq_b);
+		deq_a->a_top = deq_a->a_top->next;
+	}
+
+	 while (deq_size - count > 3)
+	// {
+	pb(deq_a, deq_b);
+	count++;
+	}
+}
+
+	
+	
+}
+
+void pre_setting_deque(t_deq *deq_a, t_deq *deq_b)
+{
+	int count;
+	int i;
+
+	count = 0;
+	i = 0;
+
+	while (deq_a->a_size > 5 && i < deq_a->a_size && count < deq_a->a_size / 2)
+	{
+		if (deq_a->a_top->index <= deq_a->a_size / 2)
+		{
+			pb(deq_a, deq_b);
+			count++;
+		}
+		ra(deq_a, deq_b);
+		i++;
+	}
+}
+
+
 
 void pre_setting_deque(t_deq *deq_a, t_deq *deq_b)
 {
@@ -22,7 +66,6 @@ void pre_setting_deque(t_deq *deq_a, t_deq *deq_b)
 	count = 0;
 	i = 0;
 	// 하나하나 순회 돌면서 pivot보다 작을 경우 넘길지 말지 결정
-
 
 	// deque 크기가 6이하이면
 	// 3개가 될 때 까지 인수들 모두 
@@ -44,12 +87,15 @@ void pre_setting_deque(t_deq *deq_a, t_deq *deq_b)
 		i++;
 	}	
 
+	// 두 개의 피봇에 대해 넘기는 경우 말해줘, 생각을 해줘!
 
-	while (deq_size - count > 3)
-	{
-		pb(deq_a, deq_b);
-		count++;
-	}
+	// 이 두부분이 과연 의미가 있을까??
+
+	// while (deq_size - count > 3)
+	// {
+	// 	pb(deq_a, deq_b);
+	// 	count++;
+	// }
 }
 
 // 끝나고 3개에 대한 정렬(sorting)이 이루어져야 함.

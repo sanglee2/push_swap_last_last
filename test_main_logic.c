@@ -6,7 +6,7 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 10:18:25 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/09 15:48:12 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/12 11:39:20 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,23 @@ int main(int ac, char *av[])
     return (0);
 }
 
+void sort()
+
+void pre_setting_deque(t_deq *deq_a, t_deq *deq_b)
+{
+
+
+
+
+
+
+}
+
+
 void pre_setting_deque(t_deq *deq_a, t_deq *deq_b)
 {
 	int deq_size;
-	int count;
+	int count; 
 	int i;
 
 	deq_size = get_deq_a_size(deq_a);
