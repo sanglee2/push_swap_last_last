@@ -6,7 +6,7 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 10:18:25 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/12 11:39:20 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/13 05:40:05 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,4 +338,17 @@ void content_trans_idx(t_deq *deq)
 	// 전부 다 update해준 후, free해서 들어가기!
 	free (deq->arr);
 	deq->arr = idx_arr;
+}
+
+3개 짜리로 만드는 것  목표!
+
+if (a 노드값 == max || a 노드값 == min)
+	pa()
+else
+	ra()
+
+
+while(temp->a_top)
+{
+	if (temp->a_top->index == max || temp->a_top->index == min)
 }

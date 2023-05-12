@@ -6,7 +6,7 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/06 01:47:56 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/06 06:00:25 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/13 05:38:03 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,7 @@ int find_min_loc(t_deq* deq)
 		temp->a_top = temp->a_top->next;
 		cur_loc++;
 	}
+	if (min_loc > deq->a_size / 2)
+		min_loc = (deq->a_size - min_loc) * -1;
 	return (min_loc);
 }

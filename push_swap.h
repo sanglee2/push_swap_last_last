@@ -6,7 +6,7 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 14:40:43 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/08 11:56:38 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/13 05:48:34 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct s_node
 
 typedef struct s_deq
 {
-	//int *arr;
+	int *arr;
 	t_node *a_top;
 	int a_size;
 	t_node *a_bot;

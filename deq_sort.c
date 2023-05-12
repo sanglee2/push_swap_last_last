@@ -151,6 +151,29 @@ void    sort(t_deq *deq_a, t_deq *deq_b)
         greedy(deq_a, deq_b);
 }
 
+void greedy(t_deq *deq_a, t_deq *deq_b)
+{
+    int min_loc;
+
+    pre_setting_deque(deq_a, deq_b);
+    get_rot_count(deq_a, deq_b);
+    if (!check_sort(deq_a))
+    {
+        min_loc = find_min_loc(deq_a);
+        while (min_loc > 0)
+        {
+            ra(deq_a);
+            min_loc--;
+        }
+        while (min_loc < 0)
+        {
+            rra(deq_a);
+            min_loc++;
+        }
+    }
+}
+
+
 int get_max_value(t_deq* deq_a)
 {
     int max;

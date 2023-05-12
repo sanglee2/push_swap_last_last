@@ -6,33 +6,31 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:50:51 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/13 04:01:04 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/13 05:40:30 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
+
 void pre_setting_deque(t_deq *deq_a, t_deq *deq_b)
 {
+	int i;
+	int pivot;
 
-	while (deq_a->a_size > 6 && deq_a->a_top)
+	i = 0;
+	pivot = deq_a->a_size / 2;
+
+	while (deq_a->a_size > 5)
 	{
-		if (deq_a->a_top->index <= deq_a->a_size / 2)
-			pb(deq_a, deq_b);
-		ra(deq_a, deq_b);
-		deq_a->a_top = deq_a->a_top->next;
+		pb(deq_a, deq_b);
+		if (deq_a->a_top->index <= pivot)
+			rb(deq_a, deq_b);
+		deq_a->a_size--;
 	}
-
-	 while (deq_size - count > 3)
-	// {
-	pb(deq_a, deq_b);
-	count++;
-	}
+	sort_five_element(deq_a);
 }
 
-	
-	
-}
 
 void pre_setting_deque(t_deq *deq_a, t_deq *deq_b)
 {
@@ -220,4 +218,23 @@ void last_setting_deque(t_deq* deq_a)
 // 	// 	pb(deq_a, deq_b);
 // 	// 	count++;
 // 	// }
+// }
+
+
+// void pre_setting_deque(t_deq *deq_a, t_deq *deq_b)
+// {
+
+// 	while (deq_a->a_size > 6 && deq_a->a_top)
+// 	{
+// 		if (deq_a->a_top->index <= deq_a->a_size / 2)
+// 			pb(deq_a, deq_b);
+// 		ra(deq_a, deq_b);
+// 		deq_a->a_top = deq_a->a_top->next;
+// 	}
+
+// 	 while (deq_size - count > 3)
+// 	// {
+// 	pb(deq_a, deq_b);
+// 	count++;
+// 	}
 // }

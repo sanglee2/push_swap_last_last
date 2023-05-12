@@ -6,7 +6,7 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 14:29:49 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/05 21:29:00 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/13 05:37:17 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,8 @@ int main(int ac, char *av[])
     deq_b = NULL;
 
     // deq_a의 크기 구하기 <- 정렬 전.
-    deq_size = ft_deq_size(deq_a);
+    deq_a->a_size = ft_deq_size(deq_a);
+	deq_b->b_size = ft_deq_size(deq_b);
 
 	// 이미 정렬이 되어있는지 아닌지 확인작업을 하는 부분.
 
