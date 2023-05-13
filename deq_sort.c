@@ -104,7 +104,7 @@ void sort_four_element(t_deq* deq_a, t_deq* deq_b)
             pa(deq_a, deq_b);
         else
             ra(deq_a);
-        size--;
+        temp->a_top = temp->a_top->next;    
     }
     sort_three_element(deq_a);
     pa (deq_a, deq_b);
@@ -126,6 +126,7 @@ void sort_five_element(t_deq* deq_a, t_deq* deq_b)
             pa(deq_a, deq_b);
         else
             ra(deq_a);
+        temp->a_top = temp->a_top->next; 
     }
     sort_three_element(deq_a);
     sort_two_elemen(deq_a);
