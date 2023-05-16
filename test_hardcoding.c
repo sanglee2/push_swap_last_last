@@ -6,7 +6,7 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 05:39:11 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/13 20:54:42 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/16 19:48:50 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,33 @@
 #include <limits.h>
 #include <stdio.h>
 
-void push_top(t_deq *deq, t_node *node)
+void push_top_b(t_deq *deq, t_node *node)
+{
+	if (deq->b_size == 0)
+	{
+		deq->b_top = node;
+		deq->b_bot = node;
+	}
+	else if (deq->b_size == 1) // 이중 연결리스트 때문에 일어나는 일일
+	{
+		deq->a_bot->prev = node;
+		node->next = deq->a_top;
+		//deq->a_top = node;
+		//deq->a_top->next = deq->a_bot;
+		deq->a_top = node;
+	}
+	else
+	{
+		deq->a_top->prev = node;
+		node->next = deq->a_top;
+		deq->a_top = node;	
+	}
+	deq->b_size++;
+}
+
+
+
+void push_top_a(t_deq *deq, t_node *node)
 {
 	if (deq->a_size == 0)
 	{
@@ -78,7 +104,7 @@ void pa(t_deq *deq_a, t_deq *deq_b) // stack에 대한 전부가 넘어와야 �
 		deq_b->b_top->prev = NULL;
 	}
 
-	push_top(deq_b, temp);
+	push_top_a(deq_a, temp);
 
 	deq_a->a_size = deq_a->a_size + 1;
 	deq_b->b_size = deq_b->b_size - 1;
@@ -92,20 +118,60 @@ void pb(t_deq *deq_a, t_deq *deq_b)
 	if (deq_a->a_size < 1)
 		return ;
 	
-	temp =  deq_a->a_top;
-
-	if (deq_a->a_size >= 1)
+	// 
+	else
 	{
-		deq_a->a_top = deq_a->a_top->next;
-		deq_a->b_top->prev = NULL;
-	}
+		temp =  deq_a->a_top;
 
-	push_top(deq_a, temp);
+		if (deq_a->a_size == 1)
+		{
+			deq_a->a_top = NULL;
+			deq_a->a_bot = NULL;
+		}
+
+		if (deq_a->a_size > 1)
+		{
+			deq_a->a_top = deq_a->a_top->next;
+			deq_a->a_top->prev = NULL;
+		}
+
+		if (deq_b->b_size < 1)
+		{
+			temp->next = NULL;
+			temp->prev = NULL;
+			deq_b->b_top = temp;
+			deq_b->b_bot = temp;
+		} 
+		push_top_b(deq_b, temp);
+	}
 
 	deq_a->a_size = deq_a->a_size + 1;
 	deq_b->b_size = deq_b->b_size - 1;
 	write(1, "pb\n", 3);	
 }
+
+
+// void pb(t_deq *deq_a, t_deq *deq_b)
+// {
+// 	t_node *temp;
+
+// 	if (deq_a->a_size < 1)
+// 		return ;
+	
+// 	temp =  deq_a->a_top;
+
+// 	if (deq_a->a_size >= 1)
+// 	{
+// 		deq_a->a_top = deq_a->a_top->next;
+// 		deq_a->b_top->prev = NULL;
+// 	}
+
+// 	push_top(deq_a, temp);
+
+// 	deq_a->a_size = deq_a->a_size + 1;
+// 	deq_b->b_size = deq_b->b_size - 1;
+// 	write(1, "pb\n", 3);	
+// }
 
 
 
@@ -140,8 +206,8 @@ void ra(t_deq *deq_a)
 	if (deq_a->a_size < 2)
 		return;
 	temp = deq_a->a_top;
-	deq_a->a_top = deq_a->a_top->next;
-	deq_a->a_top->prev = NULL;
+	deq_a->a_top = temp->next;
+	temp->prev = NULL;
 	deq_a->a_bot->next = temp;
 	temp->prev = deq_a->a_bot;
 	deq_a->a_bot = temp;
@@ -208,56 +274,87 @@ void sort_three_element(t_deq* deq_a)
 
 int get_max_value(t_deq *deq)
 {
-	t_deq *temp;
+	t_node *temp;
 	int max;
 
-	temp = deq;
+	temp = deq->a_top;
 	max = INT_MIN;
-	while (temp->a_top)
+	while (temp)
 	{
-		if (max > temp->a_top->content)
-			max = temp->a_top->content;
-		temp->a_top = temp->a_top->next;
+		if (max > temp->content)
+			max = temp->content;
+		temp = temp->next;
 	}
 	return (max);
 }
 
 int get_min_value(t_deq *deq)
 {
-	t_deq *temp;
+	t_node *temp;
 	int min;
 
-	temp = deq;
+	temp = deq->a_top;
 	min = INT_MAX;
-	while (temp->a_top)
+	while (temp)
 	{
-		if (min < temp->a_top->content)
-			min = temp->a_top->content;
-		temp->a_top = temp->a_top->next;
+		if (min > temp->content)
+			min = temp->content;
+		temp = temp->next;
 	}
 	return (min);
 }
 
+void deq_print(t_deq* deq)
+{
+	t_node	*curr;
+
+	curr = deq->a_top;
+	while (curr)
+	{
+		printf("a_top data : %d\n", curr->content);
+		curr = curr->next;
+	}
+
+	/*curr = deq->a_bot;
+	while (curr)
+	
+		printf("a_bot data : %d\n", curr->content);
+		curr = curr->prev;
+	}*/
+	curr = deq->b_top;
+	while (curr)
+	{
+		printf("b_top data : %d\n", curr->content);
+		curr = curr->next;
+	}
+	/*int i;
+	i = 0;
+	while (i < deq->arr_size)
+	{
+		printf("arr[%d] = %d\n", i, deq->arr[i]);
+		i++;
+	}*/
+}
+
+
+
 void sort_four_element(t_deq* deq_a, t_deq* deq_b)
 {
-    t_deq *temp;
-    int max;
+    t_node *temp;
     int min;
 
-    temp = deq_a;
-    max = get_max_value(deq_a);
+    temp = deq_a->a_top;
     min = get_min_value(deq_a);
 
-    while (temp->a_top->content)
+    while (deq_a->a_top->content != min)
     {
-        if (temp->a_top->content == min)
-            pb(deq_a, deq_b);
-        else
             ra(deq_a);
-        temp->a_top = temp->a_top->next;    
     }
-    sort_three_element(deq_a);
-    pa (deq_a, deq_b);
+	//if (temp->content == min)
+	pb(deq_a, deq_b);
+	deq_print(deq_b);
+    //sort_three_element(deq_a);
+    //pa (deq_a, deq_b);
 }
 
 
@@ -298,37 +395,6 @@ t_node* init_node(int arg)
 	return (node);	
 }
 
-void deq_print(t_deq* deq)
-{
-	t_node	*curr;
-
-	curr = deq->a_top;
-	while (curr)
-	{
-		printf("a_top data : %d\n", curr->content);
-		curr = curr->next;
-	}
-
-	/*curr = deq->a_bot;
-	while (curr)
-	
-		printf("a_bot data : %d\n", curr->content);
-		curr = curr->prev;
-	}*/
-	curr = deq->b_top;
-	while (curr)
-	{
-		printf("b_top data : %d\n", curr->content);
-		curr = curr->next;
-	}
-	/*int i;
-	i = 0;
-	while (i < deq->arr_size)
-	{
-		printf("arr[%d] = %d\n", i, deq->arr[i]);
-		i++;
-	}*/
-}
 
 // 자주쓰는, 계속 공통적으로 들어가는 로직이면, 함수로 만들어놓자
 
@@ -369,11 +435,12 @@ int main()
 	push_bot(deq_a, node3);
 	push_bot(deq_a, node4);
 	deq_print(deq_a);
-	deq_print(deq_b);
+	//deq_print(deq_b);
 
 	//sort_two_element(deq_a);
 	//sort_three_element(deq_a);
-	//sort_four_element(deq_a, deq_b);
+	sort_four_element(deq_a, deq_b);
+	deq_print(deq_a);
 	//deq_print(deq_a);
 	//deq_print(deq_b);*/
 }
