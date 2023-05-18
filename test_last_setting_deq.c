@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_greedy.c                                      :+:      :+:    :+:   */
+/*   test_last_setting_deq.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/18 16:01:32 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/18 22:22:31 by sanglee2         ###   ########.fr       */
+/*   Created: 2023/05/18 20:37:55 by sanglee2          #+#    #+#             */
+/*   Updated: 2023/05/18 22:09:44 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <limits.h>
 #include <stdio.h>
 
+// 제일 최신 버전 함수 -- 참고.
 
 void push_bot(t_deq *deq, t_node *node)
 {
@@ -88,125 +89,136 @@ void iterate_ra(t_deq* deq_a, int a_loc)
 
 }
 
-
-
-int ft_abs(int num)
-{	
-	if (num < 0)
-		num = num * -1;
-	return (num);
-}
-
-
-int get_a_loc(t_deq* deq_a, int b_content) //deq_b_b_top_content)
+int find_min_loc(t_deq* deq)
 {
-	int deq_a_loc;
-	int cur_loc;
-	int min;
+	t_node* temp;
 	int min_a;
-	t_deq* temp;
-
-	deq_a_loc = 0;
-	cur_loc = 0;
-	min = INT_MAX;
-	min_a = INT_MAX;
-	temp = deq_a;
-
-	while (temp->a_top)
-	{
-		if (b_content < temp->a_top->content)
-		{
-			if (min > temp->a_top->content - b_content)
-			{
-				min = temp->a_top->content - b_content;
-				deq_a_loc = cur_loc;
-			}
-		}
-		temp->a_top = temp->a_top->next;
-		cur_loc++;
-	}
-	// 같을 경우가 있겠지만 괜찮을 거 같아.
-	if (min == INT_MAX)
-	{
-		temp = deq_a;
-		cur_loc = 0;
-		while(temp->a_top)
-		{
-			if (temp->a_top->content < min_a)
-			{
-				min_a = temp->a_top->content;
-				deq_a_loc = cur_loc;
-			}
-			temp->a_top = temp->a_top->next;
-			cur_loc++;
-		}
-	}
-	if (deq_a_loc > temp->a_size / 2)
-		deq_a_loc = (temp->a_size - deq_a_loc) * -1;
-	return (deq_a_loc);
-}
-
-int get_b_loc(t_deq *deq_b, int b_content)
-{
-	t_deq *temp;
+	int min_loc;
 	int cur_loc;
-	int b_loc;
-	
-	temp = deq_b;
-	cur_loc = 0;
-	b_loc = 0;
 
-	while (temp->b_top)
+	temp = deq->a_top;
+	min_a = INT_MAX;
+	cur_loc = 0;
+
+	// 순회를 할 수 있는 방법에는 여러가지가 있다.
+	// deq에 연관되어있는 array가 멤버로 담겨져 있고
+	// deq의 크기(size)값이 따로 저장이 되어있으면 가능하다.
+	// deq의 노드를 통한 순회
+	while (temp)
 	{
-		if (b_content == temp->b_top->content)
-			b_loc = cur_loc;
-		temp->b_top = temp->b_top->next;
+		if (temp->content < min_a)
+		{
+			min_a = temp->content;
+			min_loc = cur_loc;
+		}
+		temp = temp->next;
 		cur_loc++;
 	}
-
-	if (b_loc > temp->b_size / 2)
-		b_loc = (temp->b_size - b_loc) * -1; 
-	return (b_loc);
+	if (min_loc > deq->a_size / 2)
+		min_loc = (deq->a_size - min_loc) * -1;
+	return (min_loc);
 }
 
-void act_sort(t_deq *deq_a, t_deq *deq_b, int a_rot, int b_rot)
-{	
-	if (a_rot < 0)
-		iterate_rra(deq_a, a_rot);
-	iterate_ra(deq_a, a_rot);
-	if (b_rot < 0)
-		iterate_rra(deq_b, b_rot);
-	iterate_rb(deq_b, b_rot);
-	pa(deq_a, deq_b);
-}
+// int get_deq_a_size(t_deq *deq_a)
+// {
+// 	t_deq* temp;
+// 	int size;
 
-void get_rot_count(t_deq* deq_a, t_deq* deq_b)
+// 	temp = deq_a;
+// 	size = 0;
+// 	while (temp->a_top)
+// 	{
+// 		size++;
+// 		temp->a_top = temp->a_top->next;
+// 	}
+// 	return (size);
+// }
+
+
+// cicurlar하게 정렬을 되어있으니까
+// 꼬리를 문 순열을
+// 가장 작은 값만 top에 오게끔 만들어주면
+// 1 2 3 4 
+// deque 위 부터 오름차순 정렬이 완성된다.
+void last_setting_deque(t_deq* deq_a)
 {
-	t_deq *temp;
-	int a_loc;
-	int b_loc;
-	int a_rot;
-	int b_rot;
-	int min;
+	//int deq_size;
+	int min_loc;
 
-	temp = deq_b;
-	a_loc = 0;
-	b_loc = 0;
-	min = INT_MAX;
+	//deq_size = get_deq_a_size(deq_a);
+	min_loc = find_min_loc(deq_a);
 
-	while (temp->b_top)
-	{	
-		b_loc = get_b_loc(deq_b, temp->b_top->content);
-		a_loc = get_a_loc(deq_a, temp->b_top->content);
-		if (min > ft_abs(a_loc) + ft_abs(b_loc))
-		{
-			min = ft_abs(a_loc) + ft_abs(b_loc);
-			a_rot = a_loc;
-			b_rot = b_loc;
-		}
-		temp->b_top = temp->b_top->next;
+	if (min_loc > deq_a->a_size / 2)
+	{
+		min_loc = deq_a->a_size - min_loc;
+		iterate_rra(deq_a, min_loc);
 	}
-	act_sort(deq_a, deq_b, a_rot, b_rot);
+	iterate_ra(deq_a, min_loc);
+}
+
+t_deq* create()
+{
+	t_deq *deq;
+	deq = (t_deq *)malloc(sizeof(t_deq) * 1);
+
+	return(deq);
+}
+
+t_node* init_node(int arg)
+{
+	t_node *node;
+	node = (t_node *)malloc(sizeof(t_node) * 1);
+	if (!node)
+		return(0);
+	
+	node->prev = NULL;
+	node->content = arg;
+	node->next = NULL;
+	return (node);	
+}
+
+void init_deq(t_deq *deq)
+{
+	deq->a_top = 0;
+	deq->a_bot = 0;
+	deq->a_size = 0;
+	deq->b_top = 0;
+	deq->b_bot = 0;
+	deq->b_size = 0;
+	deq->arr = 0;
+}
+
+void deq_print(t_deq* deq)
+{
+	t_node	*curr;
+
+	// temp처럼 deq->a_top으로 두는 둔 이유
+	curr = deq->a_top;
+	while (curr)
+	{
+		printf("a_top data : %d\n", curr->content);
+		curr = curr->next;
+	}
+
+	/*curr = deq->a_bot;
+	while (curr)
+	
+		printf("a_bot data : %d\n", curr->content);
+		curr = curr->prev;
+	}*/
+	curr = deq->b_top;
+	while (curr)
+	{
+		printf("b_top data : %d\n", curr->content);
+		curr = curr->next;
+	}
+	/*int i;
+	i = 0;
+	while (i < deq->arr_size)
+	{
+		printf("arr[%d] = %d\n", i, deq->arr[i]);
+		i++;
+	}*/
 }
 
 int check_sort(t_deq *deq)
@@ -224,22 +236,6 @@ int check_sort(t_deq *deq)
 	return (1);
 }
 
-void    sort(t_deq *deq_a, t_deq *deq_b)
-{
-    if (deq_a->a_size == 1)
-        return ;
-    else if (deq_a->a_size == 2 && !check_sort(deq_a))
-        sort_two_element(deq_a);
-    else if (deq_a->a_size == 3 && !check_sort(deq_a))
-        sort_three_element(deq_a);
-    else if (deq_a->a_size == 4 && !check_sort(deq_a))
-        sort_four_element(deq_a);
-    else if (deq_a->a_size == 5 && !check_sort(deq_a))
-        sort_five_element(deq_a);
-    else if (!check_sort(deq_a))
-		get_rot_count(deq_a, deq_b);
-        //greedy(deq_a, deq_b);
-}
 
 int main()
 {

@@ -1,18 +1,65 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_hardcoding.c                                  :+:      :+:    :+:   */
+/*   test_initailize_setting_deq.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/13 05:39:11 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/18 15:57:38 by sanglee2         ###   ########.fr       */
+/*   Created: 2023/05/18 16:50:18 by sanglee2          #+#    #+#             */
+/*   Updated: 2023/05/18 17:55:55 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 #include <limits.h>
 #include <stdio.h>
+
+void push_bot(t_deq *deq, t_node *node)
+{
+	// deq a가 비어있을 때.
+	// top 과 bot 모두가 현재 노드를 가리킬 수 있도록.
+	if (deq->a_size == 0)
+	{
+		deq->a_top = node;
+		deq->a_bot = node;
+	}
+	else if (deq->a_size == 1)
+	{
+		deq->a_top->next = node;
+		deq->a_bot = node;
+		deq->a_bot->prev = deq->a_top;
+	}
+	else
+	{
+		deq->a_bot->next = node;
+		node->prev = deq->a_bot;
+		deq->a_bot = node;
+	}
+	deq->a_size++;
+}
+
+void rb(t_deq *deq_b)
+{
+	t_node *temp;
+	if (deq_b->b_size < 2)
+		return;
+	temp = deq_b->b_top;
+	deq_b->b_top = deq_b->b_top->next;
+	deq_b->b_top->prev = NULL;
+	deq_b->b_bot->next = temp;
+	temp->prev = deq_b->b_bot;
+	deq_b->b_bot = temp;
+	deq_b->b_bot->next = NULL;
+	write(1, "rb\n", 3);
+}
+
+// void rb(t_deq *deq_b)
+// {
+// 	push_bot(deq_b, deq_b->b_top);
+// 	deq_b->b_top = deq_b->b_top->next;
+// 	write(1, "rb\n", 3);
+// }
+
 
 // hardcoding에서의 함수가 제일 최신.
 
@@ -65,29 +112,6 @@ void push_top_a(t_deq *deq, t_node *node)
 	deq->a_size++;
 }
 
-void push_bot(t_deq *deq, t_node *node)
-{
-	// deq a가 비어있을 때.
-	// top 과 bot 모두가 현재 노드를 가리킬 수 있도록.
-	if (deq->a_size == 0)
-	{
-		deq->a_top = node;
-		deq->a_bot = node;
-	}
-	else if (deq->a_size == 1)
-	{
-		deq->a_top->next = node;
-		deq->a_bot = node;
-		deq->a_bot->prev = deq->a_top;
-	}
-	else
-	{
-		deq->a_bot->next = node;
-		node->prev = deq->a_bot;
-		deq->a_bot = node;
-	}
-	deq->a_size++;
-}
 
 void pa(t_deq *deq_a, t_deq *deq_b) // stack에 대한 전부가 넘어와야 되나? --> 되는가?
 {
@@ -420,6 +444,25 @@ void sort_five_element(t_deq* deq_a, t_deq* deq_b)
 	ra (deq_a);
 }
 
+void pre_setting_deque(t_deq *deq_a, t_deq *deq_b)
+{
+	int i;
+	int pivot;
+
+	i = 0;
+	pivot = deq_a->a_size / 2;
+
+	while (deq_a->a_size > 5)
+	{
+		pb(deq_a, deq_b);
+		if (deq_b->b_top->content <= pivot)
+			rb(deq_b);
+		//deq_a->a_size--;
+	}
+	sort_five_element(deq_a, deq_b);
+}
+
+
 
 t_deq* create()
 {
@@ -473,6 +516,9 @@ int main()
 	t_node* node3;
 	t_node* node4;
 	t_node* node5;
+	t_node* node6;
+	t_node* node7;
+	t_node* node8;
 
 
 	int arg1;
@@ -480,15 +526,21 @@ int main()
 	int arg3;
 	int arg4;
 	int arg5;
+	int arg6;
+	int arg7;
+	int arg8;
 
 	deq_a = create();
 	//deq_b = NULL;
 	deq_b = create();
 	arg1 = 2;
-	arg2 = 1;
-	arg3 = 0;
-	arg4 = 3;
+	arg2 = 5;
+	arg3 = 1;
+	arg4 = 0;
 	arg5 = 4;
+	arg6 = 3;
+	arg7 = 6;
+	arg8 = 7;
 	//deq을 초기화 시켜줘야 뭘 넣을 수 있다.
 	init_deq(deq_a);
 	init_deq(deq_b);
@@ -497,19 +549,31 @@ int main()
 	node3 = init_node(arg3);
 	node4 = init_node(arg4);
 	node5 = init_node(arg5);
+	node6 = init_node(arg6);
+	node7 = init_node(arg7);
+	node8 = init_node(arg8);
 	push_bot(deq_a, node1);
 	push_bot(deq_a, node2);
 	push_bot(deq_a, node3);
 	push_bot(deq_a, node4);
 	push_bot(deq_a, node5);
+	push_bot(deq_a, node6);
+	push_bot(deq_a, node7);
+	push_bot(deq_a, node8);
 	deq_print(deq_a);
 	//deq_print(deq_b);
 
 	//sort_two_element(deq_a);
 	//sort_three_element(deq_a);
 	//sort_four_element(deq_a, deq_b);
-	sort_five_element(deq_a, deq_b);
+	//sort_five_element(deq_a, deq_b);
+	pre_setting_deque(deq_a, deq_b);
 	deq_print(deq_a);
+	deq_print(deq_b);
 	//deq_print(deq_a);
 	//deq_print(deq_b);*/
 }
+
+
+
+

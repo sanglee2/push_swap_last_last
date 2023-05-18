@@ -6,11 +6,12 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 21:33:03 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/06 06:00:06 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/18 16:27:03 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
 
 // 정렬이 되어있는지, 아닌지 항시 체크해주는 함수
 check_sort(t_deq *deq)
@@ -25,3 +26,20 @@ check_sort(t_deq *deq)
 	}
 	return (1);
 }
+
+
+// // 정렬이 되어있는지, 아닌지 항시 체크해주는 함수
+// check_sort(t_deq *deq)
+// {
+// 	t_node *temp;
+
+// 	temp = deq->a_top;
+
+// 	while(temp)
+// 	{
+// 		if (temp->content > temp->next->content)
+// 			return (0);
+// 		temp = temp->next;
+// 	}
+// 	return (1);
+// }

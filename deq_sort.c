@@ -2,16 +2,6 @@
 #include"push_swap.h"
 #include<limits.h>
 
-// void sort_two_element(t_deq *deq_a)
-// {
-//     int *lst;
-
-//     lst = deq_a->content;
-//     if (lst > (lst + 1))
-//         sa(deq_a);
-//     return ;
-// }
-
 
 // 포인터로 접근이 지금 어려운 점
 void sort_two_element(t_deq *deq_a)
@@ -23,30 +13,6 @@ void sort_two_element(t_deq *deq_a)
         sa(deq_a);
     return ;
 }
-
-
-// void sort_three_element(t_deq *deq_a)
-// {
-//     int *lst;
-
-//     lst = deq_a->content;
-//     if (lst > (lst + 1) && (lst + 1) < (lst + 2) && (lst + 2) < lst)
-//         sa(deq_a);
-//     else if (lst < (lst + 1) && (lst + 1) < (lst + 2) && (lst + 2) > lst)
-//     {
-//         sa(deq_a);
-//         rra(deq_a);
-//     }
-//     else if (lst > (lst + 1) && (lst + 1) < (lst + 2) && (lst + 2) > lst)
-//         ra(deq_a);
-//     else if (lst < (lst + 1) && (lst + 1) > (lst + 2) && (lst + 2) < lst)
-//     {
-//         sa(deq_a);
-//         ra(deq_a);
-//     }
-//     else if (lst < (lst + 1) && (lst + 1) > (lst + 2) && (lst + 2) > lst)
-//         rra(deq_a);
-// }
 
 void sort_three_element(t_deq *deq_a)
 {
@@ -214,6 +180,40 @@ int get_min_value(t_deq* deq_a)
 // sorting에서 명령어를 실행하는 부분, 꼭, 꼭 만들어야 한다.
 // pa 나 pb 그런식으로요.
 
+
+// void sort_two_element(t_deq *deq_a)
+// {
+//     int *lst;
+
+//     lst = deq_a->content;
+//     if (lst > (lst + 1))
+//         sa(deq_a);
+//     return ;
+// }
+
+// void sort_three_element(t_deq *deq_a)
+// {
+//     int *lst;
+
+//     lst = deq_a->content;
+//     if (lst > (lst + 1) && (lst + 1) < (lst + 2) && (lst + 2) < lst)
+//         sa(deq_a);
+//     else if (lst < (lst + 1) && (lst + 1) < (lst + 2) && (lst + 2) > lst)
+//     {
+//         sa(deq_a);
+//         rra(deq_a);
+//     }
+//     else if (lst > (lst + 1) && (lst + 1) < (lst + 2) && (lst + 2) > lst)
+//         ra(deq_a);
+//     else if (lst < (lst + 1) && (lst + 1) > (lst + 2) && (lst + 2) < lst)
+//     {
+//         sa(deq_a);
+//         ra(deq_a);
+//     }
+//     else if (lst < (lst + 1) && (lst + 1) > (lst + 2) && (lst + 2) > lst)
+//         rra(deq_a);
+// }
+
 void get_min_rotation(int *a, int *b)
 {
     int a_loc;
@@ -242,4 +242,3 @@ void get_min_rotation(int *a, int *b)
         idx++;
     }
 }
-
