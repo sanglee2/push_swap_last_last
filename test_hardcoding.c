@@ -6,7 +6,7 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 05:39:11 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/16 19:48:50 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/18 15:54:57 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,20 @@ void push_top_b(t_deq *deq, t_node *node)
 	}
 	else if (deq->b_size == 1) // 이중 연결리스트 때문에 일어나는 일일
 	{
-		deq->a_bot->prev = node;
-		node->next = deq->a_top;
+		deq->b_bot->prev = node;
+		node->next = deq->b_top;
 		//deq->a_top = node;
 		//deq->a_top->next = deq->a_bot;
-		deq->a_top = node;
+		deq->b_top = node;
 	}
 	else
 	{
-		deq->a_top->prev = node;
-		node->next = deq->a_top;
-		deq->a_top = node;	
+		deq->b_top->prev = node;
+		node->next = deq->b_top;
+		deq->b_top = node;	
 	}
 	deq->b_size++;
 }
-
-
 
 void push_top_a(t_deq *deq, t_node *node)
 {
@@ -54,11 +52,11 @@ void push_top_a(t_deq *deq, t_node *node)
 		//deq->a_top = node;
 		//deq->a_top->next = deq->a_bot;
 		deq->a_top = node;
-
 	}
 	else
 	{
 		deq->a_top->prev = node;
+		//node->prev = NULL;
 		node->next = deq->a_top;
 		deq->a_top = node;	
 	}
@@ -96,17 +94,36 @@ void pa(t_deq *deq_a, t_deq *deq_b) // stack에 대한 전부가 넘어와야 �
 	if (deq_b->b_size < 1)
 		return ;
 
-	temp = deq_b->b_top; // b의 제일 위를 가리키게 해야 함.
-
-	if (deq_b->b_size >= 1)
+	//deq_b의 크기 0이 아니라, 넘길 건덕지가 있는 경우. content가 1개라도 있을 때.
+	else
 	{
-		deq_b->b_top = deq_b->b_top->next;
-		deq_b->b_top->prev = NULL;
+		temp = deq_b->b_top; // b의 제일 위를 가리키게 해야 함.
+
+		// 넘기고 나서 deq_b의 멤버에 대한 노드들 초기화
+		if (deq_b->b_size == 1)
+		{
+			deq_b->b_top = NULL;
+			deq_b->b_bot = NULL;
+		}
+
+		// 1개 이상인 일반적인 경우면, 그렇게 진행을 해도 가능할 듯 하다
+		if (deq_b->b_size > 1)
+		{
+			deq_b->b_top = deq_b->b_top->next;
+			deq_b->b_top->prev = NULL;
+		}
+
+		// 뽑아내는 본진인 a가 아무것도 없다면 발생하는 문제에 대해서
+		if (deq_a->a_size < 1)
+		{
+			temp->next = NULL;
+			temp->prev = NULL;
+			deq_a->a_top = temp;
+			deq_a->a_bot = temp;
+		}
+		push_top_a(deq_a, temp);
 	}
-
-	push_top_a(deq_a, temp);
-
-	deq_a->a_size = deq_a->a_size + 1;
+	//deq_a->a_size = deq_a->a_size + 1;
 	deq_b->b_size = deq_b->b_size - 1;
 	write(1, "pa\n", 3);
 }
@@ -145,8 +162,8 @@ void pb(t_deq *deq_a, t_deq *deq_b)
 		push_top_b(deq_b, temp);
 	}
 
-	deq_a->a_size = deq_a->a_size + 1;
-	deq_b->b_size = deq_b->b_size - 1;
+	deq_a->a_size = deq_a->a_size - 1;
+	//deq_b->b_size = deq_b->b_size + 1;
 	write(1, "pb\n", 3);	
 }
 
@@ -182,7 +199,17 @@ void sa(t_deq *deq_a)
 	temp = deq_a->a_top->content;
 	deq_a->a_top->content = deq_a->a_top->next->content;
 	deq_a->a_top->next->content = temp;	
-	//wirte(1, "sa\n", 3);
+	write(1, "sa\n", 3);
+}
+
+void sb(t_deq *deq_b)
+{
+	int temp;
+
+	temp = deq_b->b_top->content;
+	deq_b->b_top->content = deq_b->b_top->next->content;
+	deq_b->b_top->next->content = temp;
+	write(1, "sb\n", 3);
 }
 
 // void ra(t_deq *deq_a)
@@ -207,7 +234,7 @@ void ra(t_deq *deq_a)
 		return;
 	temp = deq_a->a_top;
 	deq_a->a_top = temp->next;
-	temp->prev = NULL;
+	//temp->prev = NULL;
 	deq_a->a_bot->next = temp;
 	temp->prev = deq_a->a_bot;
 	deq_a->a_bot = temp;
@@ -225,10 +252,10 @@ void rra(t_deq *deq_a)
 	temp->next = deq_a->a_top;
 	deq_a->a_top = temp;
 	deq_a->a_top->prev = NULL;
-	write(1, "rra\n", 3);
+	write(1, "rra\n", 4);
 }
 
-void sort_two_element(t_deq *deq_a)
+void sort_two_element_a(t_deq *deq_a)
 {
     t_node *temp;
 
@@ -236,6 +263,16 @@ void sort_two_element(t_deq *deq_a)
     if (temp->content > temp->next->content)
         sa(deq_a);
     return ;
+}
+
+void sort_two_element_b(t_deq *deq_b)
+{
+	t_node *temp;
+
+	temp = deq_b->b_top;
+	if (temp->content > temp->next->content)
+		sb(deq_b);
+	return ;
 }
 
 // hard 코딩을 테스트 해주기 위해선, 기본적인 content를 활용.
@@ -281,7 +318,7 @@ int get_max_value(t_deq *deq)
 	max = INT_MIN;
 	while (temp)
 	{
-		if (max > temp->content)
+		if (max < temp->content)
 			max = temp->content;
 		temp = temp->next;
 	}
@@ -308,6 +345,7 @@ void deq_print(t_deq* deq)
 {
 	t_node	*curr;
 
+	// temp처럼 deq->a_top으로 두는 둔 이유
 	curr = deq->a_top;
 	while (curr)
 	{
@@ -337,7 +375,6 @@ void deq_print(t_deq* deq)
 }
 
 
-
 void sort_four_element(t_deq* deq_a, t_deq* deq_b)
 {
     t_node *temp;
@@ -347,14 +384,38 @@ void sort_four_element(t_deq* deq_a, t_deq* deq_b)
     min = get_min_value(deq_a);
 
     while (deq_a->a_top->content != min)
-    {
-            ra(deq_a);
-    }
+		ra(deq_a);
 	//if (temp->content == min)
 	pb(deq_a, deq_b);
-	deq_print(deq_b);
-    //sort_three_element(deq_a);
-    //pa (deq_a, deq_b);
+	//deq_print(deq_b);
+    sort_three_element(deq_a);
+    pa (deq_a, deq_b);
+}
+
+
+void sort_five_element(t_deq* deq_a, t_deq* deq_b)
+{
+    t_node *temp;
+    int max;
+    int min;
+
+    temp = deq_a->a_top;
+    max = get_max_value(deq_a);
+    min = get_min_value(deq_a);
+
+	while (deq_a->a_size > 3)
+	{
+		if (deq_a->a_top->content == max || deq_a->a_top->content == min)
+			pb(deq_a, deq_b);
+		else
+			ra(deq_a);
+	}
+    sort_three_element(deq_a);
+    sort_two_element_b(deq_b);
+    //deq이 빌 때까지 while문을 돌리는 것이 맞는지
+    pa (deq_a, deq_b);
+    pa (deq_a, deq_b);
+	ra (deq_a);
 }
 
 
@@ -409,12 +470,14 @@ int main()
 	t_node* node2;
 	t_node* node3;
 	t_node* node4;
+	t_node* node5;
 
 
 	int arg1;
 	int arg2;
 	int arg3;
 	int arg4;
+	int arg5;
 
 	deq_a = create();
 	//deq_b = NULL;
@@ -423,6 +486,7 @@ int main()
 	arg2 = 1;
 	arg3 = 0;
 	arg4 = 3;
+	arg5 = 4;
 	//deq을 초기화 시켜줘야 뭘 넣을 수 있다.
 	init_deq(deq_a);
 	init_deq(deq_b);
@@ -430,16 +494,19 @@ int main()
 	node2 = init_node(arg2);
 	node3 = init_node(arg3);
 	node4 = init_node(arg4);
+	node5 = init_node(arg5);
 	push_bot(deq_a, node1);
 	push_bot(deq_a, node2);
 	push_bot(deq_a, node3);
 	push_bot(deq_a, node4);
+	push_bot(deq_a, node5);
 	deq_print(deq_a);
 	//deq_print(deq_b);
 
 	//sort_two_element(deq_a);
 	//sort_three_element(deq_a);
-	sort_four_element(deq_a, deq_b);
+	//sort_four_element(deq_a, deq_b);
+	sort_five_element(deq_a, deq_b);
 	deq_print(deq_a);
 	//deq_print(deq_a);
 	//deq_print(deq_b);*/
