@@ -6,7 +6,7 @@
 /*   By: sanglee2 <sanglee2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:01:32 by sanglee2          #+#    #+#             */
-/*   Updated: 2023/05/18 22:22:31 by sanglee2         ###   ########.fr       */
+/*   Updated: 2023/05/19 18:39:28 by sanglee2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,29 +182,29 @@ void act_sort(t_deq *deq_a, t_deq *deq_b, int a_rot, int b_rot)
 
 void get_rot_count(t_deq* deq_a, t_deq* deq_b)
 {
-	t_deq *temp;
+	t_node *temp;
 	int a_loc;
 	int b_loc;
 	int a_rot;
 	int b_rot;
 	int min;
 
-	temp = deq_b;
+	temp = deq_b->b_top;
 	a_loc = 0;
 	b_loc = 0;
 	min = INT_MAX;
 
-	while (temp->b_top)
+	while (temp)
 	{	
-		b_loc = get_b_loc(deq_b, temp->b_top->content);
-		a_loc = get_a_loc(deq_a, temp->b_top->content);
+		b_loc = get_b_loc(deq_b, temp->content);
+		a_loc = get_a_loc(deq_a, temp->content);
 		if (min > ft_abs(a_loc) + ft_abs(b_loc))
 		{
 			min = ft_abs(a_loc) + ft_abs(b_loc);
 			a_rot = a_loc;
 			b_rot = b_loc;
 		}
-		temp->b_top = temp->b_top->next;
+		temp = temp->next;
 	}
 	act_sort(deq_a, deq_b, a_rot, b_rot);
 }
@@ -240,6 +240,8 @@ void    sort(t_deq *deq_a, t_deq *deq_b)
 		get_rot_count(deq_a, deq_b);
         //greedy(deq_a, deq_b);
 }
+
+
 
 int main()
 {
@@ -297,11 +299,15 @@ int main()
 	push_bot(deq_a, node6);
 	push_bot(deq_a, node7);
 	push_bot(deq_a, node8);
+
+
+	get_rot_count(deq_a, deq_b);
+
 	deq_print(deq_a);
 	//deq_print(deq_b);
 
-	if(!check_sort(deq_a))
-		last_setting_deque(deq_a);
+	//if(!check_sort(deq_a))
+		//last_setting_deque(deq_a);
 
 	//sort_two_element(deq_a);
 	//sort_three_element(deq_a);
